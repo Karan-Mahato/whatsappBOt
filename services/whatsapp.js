@@ -9,21 +9,49 @@ const HEADERS = {
   'Content-Type': 'application/json'
 };
 
+// async function sendWelcomeTemplate(phone) {
+//     console.log('Sending welcome template to:', phone);
+//   const res = await axios.post(META_URL, {
+//     messaging_product: 'whatsapp',
+//     to: phone,
+//     type: 'template',
+//     template: {
+//       name: 'welcome_1033_en',
+//       language: { code: 'en' }
+//     }
+//   }, { headers: HEADERS });
+
+//   console.log('Template sent:', res.data);
+//   return res.data;
+// }
 async function sendWelcomeTemplate(phone) {
-    console.log('Sending welcome template to:', phone);
   const res = await axios.post(META_URL, {
     messaging_product: 'whatsapp',
     to: phone,
     type: 'template',
     template: {
       name: 'welcome_1033_en',
-      language: { code: 'en' }
+      language: { code: 'en' },
+      components: [
+        {
+          type: 'header',
+          parameters: [
+            {
+              type: 'image',
+              image: {
+                link: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/5d/NHAI_Logo.svg/1200px-NHAI_Logo.svg.png'
+              }
+            }
+          ]
+        }
+      ]
     }
   }, { headers: HEADERS });
 
   console.log('Template sent:', res.data);
   return res.data;
 }
+
 
 async function sendText(phone, text) {
   const res = await axios.post(META_URL, {
