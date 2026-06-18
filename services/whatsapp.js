@@ -16,7 +16,7 @@ async function sendWelcomeTemplate(phone) {
     to: phone,
     type: 'template',
     template: {
-      name: 'hello_world',
+      name: 'welcome_1033_en',
       language: { code: 'en' }
     }
   }, { headers: HEADERS });
