@@ -28,6 +28,7 @@ app.post('/send-welcome', async (req, res) => {
 
   try {
     await sendWelcomeTemplate(phone);
+    await serviceSelection(phone);
     res.json({ success: true });
   } catch (err) {
     console.log(res);
@@ -48,7 +49,6 @@ app.post('/lang-select', async (req, res) => {
 
   try {
     await selectLanguage(phone);
-    await serviceSelection(phone);
     res.json({ success: true });
   } catch (err) {
     console.log(res);
