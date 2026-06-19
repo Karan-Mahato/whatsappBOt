@@ -48,25 +48,6 @@ app.post('/lang-select', async (req, res) => {
 
   try {
     await selectLanguage(phone);
-    res.json({ success: true });
-  } catch (err) {
-    console.log(res);
-    console.error('Meta API error:', JSON.stringify(err?.response?.data, null, 2));
-    res.status(500).json({ error: err?.response?.data });
-  }
-});
-
-app.post('/service-select', async (req, res) => {
-
-  const phone = req.body.phone
-    || req.body.contact?.phone
-    || req.body.from;
-
-  console.log('Extracted phone:', phone);
-
-  if (!phone) return res.status(400).json({ error: 'No phone number' });
-
-  try {
     await serviceSelection(phone);
     res.json({ success: true });
   } catch (err) {
@@ -75,6 +56,26 @@ app.post('/service-select', async (req, res) => {
     res.status(500).json({ error: err?.response?.data });
   }
 });
+
+// app.post('/service-select', async (req, res) => {
+
+//   const phone = req.body.phone
+//     || req.body.contact?.phone
+//     || req.body.from;
+
+//   console.log('Extracted phone:', phone);
+
+//   if (!phone) return res.status(400).json({ error: 'No phone number' });
+
+//   try {
+//     await serviceSelection(phone);
+//     res.json({ success: true });
+//   } catch (err) {
+//     console.log(res);
+//     console.error('Meta API error:', JSON.stringify(err?.response?.data, null, 2));
+//     res.status(500).json({ error: err?.response?.data });
+//   }
+// });
 
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
