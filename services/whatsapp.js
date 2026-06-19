@@ -5,7 +5,7 @@ require("dotenv").config();
 const META_URL = `https://graph.facebook.com/v19.0/${process.env.META_PHONE_NUMBER_ID}/messages`;
 
 const HEADERS = {
-  'Authorization': `Bearer ${process.env.META_ACCESS_TOKEN}`,
+  Authorization: `Bearer ${process.env.META_ACCESS_TOKEN}`,
   'Content-Type': 'application/json'
 };
 
@@ -39,7 +39,7 @@ async function sendWelcomeTemplate(phone) {
             {
               type: 'image',
               image: {
-                link: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/5d/NHAI_Logo.svg/1200px-NHAI_Logo.svg.png'
+                link: 'https://lh3.googleusercontent.com/d/1iBTkgERgbKswN_8RTPa-X9RhTeB5koo4'
               }
             }
           ]
