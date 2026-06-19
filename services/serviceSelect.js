@@ -9,27 +9,14 @@ const HEADERS = {
   'Content-Type': 'application/json'
 };
 
-async function selectLanguage(phone) {
+async function serviceSelection(phone) {
   const res = await axios.post(META_URL, {
     messaging_product: 'whatsapp',
     to: phone,
     type: 'template',
     template: {
-      name: 'language_selection',
+      name: 'service_selection',
       language: { code: 'en' },
-      components: [
-        {
-          type: 'header',
-          parameters: [
-            {
-              type: 'image',
-              image: {
-                link: 'https://lh3.googleusercontent.com/d/1754S9hvDp7GrkLvj-wilzrWCqLs0Lk9V'
-              }
-            }
-          ]
-        }
-      ]
     }
   }, { headers: HEADERS });
 
@@ -37,4 +24,4 @@ async function selectLanguage(phone) {
   return res.data;
 }
 
-module.exports = { selectLanguage};
+module.exports = {serviceSelection};

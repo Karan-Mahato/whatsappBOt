@@ -1,4 +1,4 @@
-const { sendWelcomeTemplate, sendText } = require('../services/whatsapp');
+const { sendWelcomeTemplate, sendText } = require('../services/welcome');
 
 // GET — Meta verifies webhook
 function handleVerification(req, res) {

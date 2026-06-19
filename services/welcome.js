@@ -37,16 +37,4 @@ async function sendWelcomeTemplate(phone) {
   return res.data;
 }
 
-
-async function sendText(phone, text) {
-  const res = await axios.post(META_URL, {
-    messaging_product: 'whatsapp',
-    to: phone,
-    type: 'text',
-    text: { body: text }
-  }, { headers: HEADERS });
-
-  return res.data;
-}
-
 module.exports = { sendWelcomeTemplate, sendText };
