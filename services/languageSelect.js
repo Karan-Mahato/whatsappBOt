@@ -9,13 +9,13 @@ const HEADERS = {
   'Content-Type': 'application/json'
 };
 
-async function sendWelcomeTemplate(phone) {
+async function selectLanguage(phone) {
   const res = await axios.post(META_URL, {
     messaging_product: 'whatsapp',
     to: phone,
     type: 'template',
     template: {
-      name: 'welcome_1033_en',
+      name: 'language_selection',
       language: { code: 'en' },
       components: [
         {
@@ -24,7 +24,7 @@ async function sendWelcomeTemplate(phone) {
             {
               type: 'image',
               image: {
-                link: 'https://lh3.googleusercontent.com/d/1iBTkgERgbKswN_8RTPa-X9RhTeB5koo4'
+                link: 'https://lh3.googleusercontent.com/d/1754S9hvDp7GrkLvj-wilzrWCqLs0Lk9V'
               }
             }
           ]
@@ -49,4 +49,4 @@ async function sendText(phone, text) {
   return res.data;
 }
 
-module.exports = { sendWelcomeTemplate, sendText };
+module.exports = { selectLanguage, sendText };
