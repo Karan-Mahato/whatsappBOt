@@ -37,4 +37,4 @@ async function sendWelcomeTemplate(phone) {
   return res.data;
 }
 
-module.exports = { sendWelcomeTemplate, sendText };
+module.exports = { sendWelcomeTemplate};
