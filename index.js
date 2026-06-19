@@ -6,6 +6,8 @@ const { selectLanguage } = require('./services/languageSelect');
 const { serviceSelection } = require('./services/serviceSelect');
 
 const app = express();
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const SERVICE_SELECTION_DELAY_MS = 2000;
 
 // Proxy everything EXCEPT /send-welcome to Whatomate
 app.use('/api', createProxyMiddleware({
@@ -27,9 +29,15 @@ app.post('/send-welcome', async (req, res) => {
   if (!phone) return res.status(400).json({ error: 'No phone number' });
 
   try {
-    await sendWelcomeTemplate(phone);
-    await serviceSelection(phone);
-    res.json({ success: true });
+    const welcomeResponse = await sendWelcomeTemplate(phone);
+    await delay(SERVICE_SELECTION_DELAY_MS);
+    const serviceSelectionResponse = await serviceSelection(phone);
+
+    res.json({
+      success: true,
+      welcome: welcomeResponse,
+      serviceSelection: serviceSelectionResponse
+    });
   } catch (err) {
     console.log(res);
     console.error('Meta API error:', JSON.stringify(err?.response?.data, null, 2));
