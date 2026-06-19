@@ -7,7 +7,7 @@ const { serviceSelection } = require('./services/serviceSelect');
 
 const app = express();
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-const SERVICE_SELECTION_DELAY_MS = 2000;
+const SERVICE_SELECTION_DELAY_MS = 20000;
 
 // Proxy everything EXCEPT /send-welcome to Whatomate
 app.use('/api', createProxyMiddleware({
