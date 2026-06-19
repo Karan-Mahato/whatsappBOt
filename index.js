@@ -29,6 +29,7 @@ app.post('/send-welcome', async (req, res) => {
     await sendWelcomeTemplate(phone);
     res.json({ success: true });
   } catch (err) {
+    console.log(res);
     console.error('Meta API error:', JSON.stringify(err?.response?.data, null, 2));
     res.status(500).json({ error: err?.response?.data });
   }
