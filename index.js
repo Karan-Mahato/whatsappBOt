@@ -38,9 +38,10 @@ app.post('/send-welcome', async (req, res) => {
       serviceSelection: serviceSelectionResponse
     });
   } catch (err) {
-    console.log(res);
     console.error('Meta API error:', JSON.stringify(err?.response?.data, null, 2));
-    res.status(500).json({ error: err?.response?.data });
+    res.status(500).json({
+      error: err?.response?.data || { message: err.message }
+    });
   }
 });
 
@@ -58,9 +59,10 @@ app.post('/lang-select', async (req, res) => {
     await selectLanguage(phone);
     res.json({ success: true });
   } catch (err) {
-    console.log(res);
     console.error('Meta API error:', JSON.stringify(err?.response?.data, null, 2));
-    res.status(500).json({ error: err?.response?.data });
+    res.status(500).json({
+      error: err?.response?.data || { message: err.message }
+    });
   }
 });
 

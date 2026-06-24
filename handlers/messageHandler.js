@@ -34,9 +34,18 @@ async function handleIncoming(req, res) {
   res.sendStatus(200);
 
   try {
+    console.log('Webhook received:', JSON.stringify({
+      event: req.body?.event || null,
+      messageType: req.body?.data?.message_type || null,
+      contactPhone: req.body?.data?.contact_phone || null
+    }));
+
     const normalized = normalizeIncomingMessage(req.body);
 
-    if (!normalized) return;
+    if (!normalized) {
+      console.warn('Webhook payload was not recognized:', JSON.stringify(req.body));
+      return;
+    }
 
     const { userPhone, type, text, languageCode, serviceCode } = normalized;
 
@@ -117,7 +126,10 @@ async function handleIncoming(req, res) {
       return;
     }
   } catch (err) {
-    console.error('Error handling message:', err?.response?.data || err.message);
+    console.error(
+      'Error handling message:',
+      JSON.stringify(err?.response?.data || { message: err.message }, null, 2)
+    );
   }
 }
 
