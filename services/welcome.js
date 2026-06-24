@@ -29,7 +29,7 @@ function getWelcomeTemplateName(language) {
     return process.env.WELCOME_TEMPLATE_NAME;
   }
 
-  return language === 'en' ? 'welcome_1033_en' : `welcome_1033_${language}`;
+  return language === 'en' ? 'welcome' : `welcome`;
 }
 
 function getTemplateLanguageCode(language) {
