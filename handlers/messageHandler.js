@@ -12,7 +12,7 @@ const {
 const { serviceSelection } = require('../services/serviceSelect');
 const { sendText } = require('../services/whatsapp');
 const { getSession, upsertSession } = require('../services/sessionStore');
-const { sendWelcomeTemplate } = require('../services/welcome');
+const { sendTestWelcomeTemplate, sendWelcomeTemplate } = require('../services/welcome');
 
 const GREETING_RE = /^(hi|hii|hello|hey|ya|start|namaste)$/i;
 const SERVICE_SELECTION_DELAY_MS = Number(process.env.SERVICE_SELECTION_DELAY_MS || 1500);
@@ -57,7 +57,7 @@ async function handleIncoming(req, res) {
         currentFlow: null,
         currentStep: null
       });
-      await sendWelcomeTemplate(userPhone, 'en');
+      await sendTestWelcomeTemplate(userPhone);
       return;
     }
 
@@ -261,6 +261,16 @@ function normalizeWhatomateWebhook(body) {
   const messageType = String(data.message_type || '').toLowerCase();
   const content = data.content || '';
   const parsedContent = parseMaybeJson(content);
+
+  // Plain text such as "hi" must remain text, not the Hindi language code.
+  if (messageType === 'text' && content) {
+    return {
+      userPhone: phone,
+      type: 'text',
+      text: String(content)
+    };
+  }
+
   const languageCode = extractLanguageCode(data) || extractLanguageCode(parsedContent) || normalizeLanguageCode(content);
   const serviceCode = extractServiceCode(data) || extractServiceCode(parsedContent) || normalizeServiceCode(content);
 
@@ -277,14 +287,6 @@ function normalizeWhatomateWebhook(body) {
       userPhone: phone,
       type: 'service_selection',
       serviceCode
-    };
-  }
-
-  if (messageType === 'text' && content) {
-    return {
-      userPhone: phone,
-      type: 'text',
-      text: String(content)
     };
   }
 
