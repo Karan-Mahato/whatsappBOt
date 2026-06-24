@@ -1,22 +1,12 @@
-const axios = require('axios');
-
-require("dotenv").config();
-
-const META_URL = `https://graph.facebook.com/v19.0/${process.env.META_PHONE_NUMBER_ID}/messages`;
-
-const HEADERS = {
-  Authorization: `Bearer ${process.env.META_ACCESS_TOKEN}`,
-  'Content-Type': 'application/json'
-};
+const { sendWhatsAppMessage } = require('./whatsapp');
 
 async function selectLanguage(phone) {
-  const res = await axios.post(META_URL, {
-    messaging_product: 'whatsapp',
+  return sendWhatsAppMessage({
     to: phone,
     type: 'template',
     template: {
-      name: 'language_selection',
-      language: { code: 'en' },
+      name: process.env.LANGUAGE_SELECTION_TEMPLATE_NAME || 'language_selection',
+      language: { code: process.env.LANGUAGE_SELECTION_TEMPLATE_LANG || 'en' },
       components: [
         {
           type: 'header',
@@ -24,17 +14,44 @@ async function selectLanguage(phone) {
             {
               type: 'image',
               image: {
-                link: 'https://lh3.googleusercontent.com/d/1754S9hvDp7GrkLvj-wilzrWCqLs0Lk9V'
+                link: process.env.LANGUAGE_SELECTION_IMAGE_URL || 'https://lh3.googleusercontent.com/d/1754S9hvDp7GrkLvj-wilzrWCqLs0Lk9V'
               }
             }
           ]
         }
       ]
     }
-  }, { headers: HEADERS });
-
-  console.log('Template sent:', res.data);
-  return res.data;
+  });
 }
 
-module.exports = { selectLanguage};
+async function openOtherLanguageFlow(phone) {
+  return sendWhatsAppMessage({
+    to: phone,
+    type: 'interactive',
+    interactive: {
+      type: 'flow',
+      header: {
+        type: 'text',
+        text: 'Select Language'
+      },
+      body: {
+        text: 'Choose your preferred language from the available options.'
+      },
+      action: {
+        name: 'flow',
+        parameters: {
+          flow_message_version: '3',
+          flow_id: process.env.OTHER_LANGUAGE_FLOW_ID || process.env.LANGUAGE_SELECTION_FLOW_ID,
+          flow_token: `other_lang_${phone}_${Date.now()}`,
+          flow_cta: 'Select language',
+          flow_action: 'navigate',
+          flow_action_payload: {
+            screen: process.env.OTHER_LANGUAGE_SCREEN || process.env.LANGUAGE_SELECTION_SCREEN || 'LANGUAGE_SELECTION'
+          }
+        }
+      }
+    }
+  });
+}
+
+module.exports = { selectLanguage, openOtherLanguageFlow };

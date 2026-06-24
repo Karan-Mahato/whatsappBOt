@@ -1,22 +1,12 @@
-const axios = require('axios');
+const { sendWhatsAppMessage } = require('./whatsapp');
 
-require("dotenv").config();
-
-const META_URL = `https://graph.facebook.com/v19.0/${process.env.META_PHONE_NUMBER_ID}/messages`;
-
-const HEADERS = {
-  Authorization: `Bearer ${process.env.META_ACCESS_TOKEN}`,
-  'Content-Type': 'application/json'
-};
-
-async function sendWelcomeTemplate(phone) {
-  const res = await axios.post(META_URL, {
-    messaging_product: 'whatsapp',
+async function sendWelcomeTemplate(phone, language = 'en') {
+  return sendWhatsAppMessage({
     to: phone,
     type: 'template',
     template: {
-      name: 'welcome_1033_en',
-      language: { code: 'en' },
+      name: getWelcomeTemplateName(language),
+      language: { code: getTemplateLanguageCode(language) },
       components: [
         {
           type: 'header',
@@ -31,10 +21,19 @@ async function sendWelcomeTemplate(phone) {
         }
       ]
     }
-  }, { headers: HEADERS });
-
-  console.log('Template sent:', res.data);
-  return res.data;
+  });
 }
 
-module.exports = { sendWelcomeTemplate};
+function getWelcomeTemplateName(language) {
+  if (process.env.WELCOME_TEMPLATE_NAME) {
+    return process.env.WELCOME_TEMPLATE_NAME;
+  }
+
+  return language === 'en' ? 'welcome_1033_en' : `welcome_1033_${language}`;
+}
+
+function getTemplateLanguageCode(language) {
+  return process.env.WELCOME_TEMPLATE_LANG || language || 'en';
+}
+
+module.exports = { sendWelcomeTemplate };
