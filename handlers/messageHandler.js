@@ -44,10 +44,11 @@ async function handleIncoming(req, res) {
 
     if (type === 'text' && GREETING_RE.test(text.trim())) {
       await upsertSession(userPhone, {
-        currentFlow: 'LANGUAGE_SELECTION',
-        currentStep: 'ASK_LANGUAGE'
+        language: 'en',
+        currentFlow: null,
+        currentStep: null
       });
-      await selectLanguage(userPhone);
+      await sendWelcomeTemplate(userPhone, 'en');
       return;
     }
 
